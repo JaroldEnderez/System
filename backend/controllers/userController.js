@@ -43,21 +43,26 @@ const registerUser = asyncHandler(async(req,res) => {
     }
 )
 
-const authUser = asyncHandler(async(req,res) => {
-    const {email, password} = req.body
+const authUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
 
-    const user = await User.findOne({email})
+  const user = await User.findOne({ email });
 
-    if(user && (await User.matchPassword(password))){
-        res.json({
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            token: generateToken(user._id),
-        })
-    }
-})
+  if (user && (await user.matchPassword(password))) {
+    // Use user.matchPassword instead of User.matchPassword
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      // Do not include the password in the response for security reasons
+      password: user.password,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(401).json({ message: 'Invalid email or password' });
+  }
+});
+
 
 const allUsers = asyncHandler(async(req,res) => {
     try {

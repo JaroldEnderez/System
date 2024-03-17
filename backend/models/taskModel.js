@@ -2,13 +2,12 @@ const mongoose = require("mongoose")
 
 const taskModel = mongoose.Schema(
     {   
-        title: {type:String, trim:true},
+        text: {type:String, trim:true},
         description: {type:String, trim:true}, 
-        startDate: {type:Date},
-        endDate: {type:Date},
-        status: {type:Boolean},
-        assignedTo: {type:String},
-        priority: {type:String},
+        start_date: {type:Date},
+        duration: {type:Number},
+        projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required:true},
+        progress: {type: mongoose.Schema.Types.Decimal128, default:0}
     },
     {
         timestamps:true,

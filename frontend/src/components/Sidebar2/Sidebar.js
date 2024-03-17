@@ -1,26 +1,21 @@
 // Sidebar.js
 import React from 'react';
-import { Box, VStack, Text, Link, Icon } from '@chakra-ui/react';
+import { Box, VStack, Text, Icon } from '@chakra-ui/react';
+import {Link} from 'react-router-dom'
 import { RiDashboardLine, RiSettingsLine, RiLogoutBoxLine } from 'react-icons/ri'; // You can choose your own icons
 
 const Sidebar = () => {
   return (
     <Box
-      as="nav"
-      bg="gray.800"
-      color="white"
-      width="250px"
-      height="100vh"
-      position="relative"
-      align="left"
-      top="0"
-      left="0"
-      boxShadow="md"
-      paddingY="4"
-      style={{ zIndex: 1 }}
+    width="250px"
+    bg="gray.800"
+    color="white"
+    boxShadow="md"
+    paddingY="4"
+    style={{ zIndex: 1 }}
     >
       <VStack spacing="4" align="start" paddingX="4">
-        <Link>
+        <Link to='/chats' >
           <Icon as={RiDashboardLine} boxSize="6" />
           <Text>Dashboard</Text>
         </Link>

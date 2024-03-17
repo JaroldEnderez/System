@@ -11,8 +11,12 @@ const projectModel = mongoose.Schema(
 
         isOngoing: {type:Boolean, default:false},
 
-        location: {type:String, default:true},
-
+        city: { type: String },
+        
+        province: { type: String },
+        
+        street: { type: String },
+        
         procuring_entity: {type:String, trim:true},
         
         project_name: {type:String, trim:true},
@@ -26,10 +30,14 @@ const projectModel = mongoose.Schema(
         status: {
             type: String,
             enum: ['Pending', 'Completed', 'Ongoing', 'Paused'],
-            default: 'Pending',
+            default: 'Ongoing'
           },
 
-        tasks: [Task.schema]
+        tasks: [{type: mongoose.Schema.Types.ObjectId,
+            ref: 'Task',}],
+
+        projectDescription: {type: String}
+        
     },
     {
         timestamps:true,

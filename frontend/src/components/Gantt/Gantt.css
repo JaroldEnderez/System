@@ -1,0 +1,8 @@
+.gantt-container {
+  height: calc(100vh - 50px - 200px);
+}
+
+#myCover {
+  width:700px;
+  height:600px;
+}

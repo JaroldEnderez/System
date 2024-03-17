@@ -15,6 +15,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.2",
     "date-fns": "^3.0.6",
+    "dhtmlx-gantt": "^8.0.6",
     "framer-motion": "^10.16.14",
     "gantt-task-react": "^0.3.9",
     "react": "^18.2.0",

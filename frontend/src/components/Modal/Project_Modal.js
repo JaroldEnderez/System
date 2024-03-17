@@ -29,7 +29,7 @@ const Project_Modal = ({ onCreate }) => {
   const [location, setLocation] = useState('');
   const [procuring_entity, setProcuringEntity] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
-
+  
   const handleCreateProject = async () => {
   
     if (!project_name || !contract || !contractor || !funds || !location || !procuring_entity || !projectDescription) {

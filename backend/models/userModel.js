@@ -17,11 +17,15 @@ const userModel = mongoose.Schema(
     }
 )
 userModel.methods.matchPassword = async function(enteredPassword){
+    console.log('matchPassword method executed');
+  console.log('enteredPassword:', enteredPassword);
+  console.log('this.password:', this.password);
     return await bcrypt.compare(enteredPassword, this.password)
 }
 
 
 userModel.pre('save', async function(next){
+    console.log('Pre-save hook executed');
     if(!this.isModified){
         next()
     }

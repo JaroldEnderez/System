@@ -1,32 +1,36 @@
 // UserList.js
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Box, Heading, List, ListItem, Button, Flex, Collapse, Text } from '@chakra-ui/react';
+import { Box, Heading, List, ListItem, Button, Flex, Collapse, Text, VStack, ChakraProvider } from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import Project_Modal from '../Modal/Project_Modal'
+import { useHistory } from 'react-router-dom';  // Import useHistory
+import Header from '../Header';
+import Sidebar from '../Sidebar2/Sidebar';
+import CustomTheme from '../../CustomTheme';
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
+  const [sectionStates, setSectionStates] = useState([]);
+  const history = useHistory();  // Initialize useHistory
 
+  
   // Simulating fetching projects from the database
   useEffect(() => {
     // Replace this with your actual API call to fetch projects
     const fetchProjects = async () => {
       // Example: Fetching projects from an API
       try {
-        const response = await axios.get('/api/project');
-        const data = response.data;
+        const response = await fetch('/api/project');
+        const data = await response.json();
+        console.log(data)
         setProjects(data);
       } catch (error) {
-        console.error('Error fetching project:', error);
+        console.error('Error fetching projects:', error);
       }
     };
 
     fetchProjects();
   }, []);
-
-  const [sectionStates, setSectionStates] = useState([]);
 
   useEffect(() => {
     // Update sectionStates based on the number of projects
@@ -40,28 +44,61 @@ const ProjectList = () => {
       return newStates;
     });
   };
+  
+  const handleEditProject = (projectId) => {
+    // Redirect to the edit page with the project ID
+    history.push(`/edit-project/${projectId}`);
+  };
 
   return (
-    <Box padding='4' paddingBottom='4'>
-      <Heading paddingBottom='10'>Projects</Heading>
-      {/* Render dynamic collapsible sections based on projects */}
-      {projects.map((project, index) => (
-        <div key={project.id}>
-          <Button onClick={() => handleToggleCollapse(index)} leftIcon={sectionStates[index] ? <ChevronDownIcon /> : <ChevronUpIcon />}>
-            {project.project_name}
-          </Button>
+    <ChakraProvider theme={CustomTheme}>
+        <Flex direction="row">
+            <Sidebar />
+              <VStack
+                align="flex-start" // Set vertical alignment to flex-start
+                height="100vh"    // Set a height for the container (adjust as needed)           // Allow the VStack to grow and take remaining horizontal space
+                overflowX="auto"
+                width="100%"
+                >
+                <Header/>
+                <Box padding='4' paddingBottom='4'>
+                <Heading paddingBottom='10'>Projects</Heading>
+                {/* Render dynamic collapsible sections based on projects */}
+                {projects.map((project, index) => (
+                  <div key={project.id}>
+                    <Flex justify="space-between" align="center" marginBottom="2">
+                      <Button
+                        onClick={() => handleToggleCollapse(index)}
+                        leftIcon={sectionStates[index] ? <ChevronDownIcon /> : <ChevronUpIcon />}
+                      >
+                        {project.project_name}
+                      </Button>
+                    </Flex>
 
-          <Collapse in={sectionStates[index]}>
-            
-            <Box p={4} borderWidth="1px" borderRadius="md">
-              <Heading>{`Project name: ${project.project_name}`}</Heading>
-            </Box>
-          </Collapse>
-        </div>
-      ))}
-      <br/>
-      <Project_Modal/>
-    </Box>
+            <Collapse in={sectionStates[index]}>
+              <Box p={4} borderWidth="1px" borderRadius="md">
+                <Heading>{`Project name: ${project.project_name}`}</Heading>
+                <Text>{`Location: ${project.street}, ${project.city}, ${project.province}`}</Text>
+                <Text>{`Contract: ${project.contract}`}</Text>
+                <Text>{`Contractor: ${project.contractor}`}</Text>
+                <Text>{`Procuring Entity: ${project.procuring_entity}`}</Text>
+                <Text>{`Status: ${project.status}`}</Text>
+                <Text>{`Created at: ${project.createdAt}`}</Text>
+
+                {/* Edit button inside the collapsible section */}
+                <Button onClick={() => handleEditProject(project._id)} colorScheme="blue" size="sm" marginTop="2">
+                  Edit
+                </Button>
+              </Box>
+            </Collapse>
+    </div>
+  ))}
+  <br/>
+</Box>
+
+        </VStack>
+        </Flex>
+    </ChakraProvider>
   );
 };
 

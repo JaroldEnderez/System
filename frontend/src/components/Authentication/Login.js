@@ -2,10 +2,12 @@ import { Button } from "@chakra-ui/button";
 import { FormControl, FormLabel } from "@chakra-ui/form-control";
 import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import axios from "axios";
 import { useToast } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
+import { UserAuth } from "../../Context/UserProvider"
+
 //import { ChatState } from "../../Context/ChatProvider";
 
 const Login = () => {
@@ -15,9 +17,18 @@ const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
-
   const history = useHistory();
+  const { login, user } = UserAuth();
   // const { setUser } = ChatState();
+
+
+  useEffect(() => {
+    // Check if the user is already logged in
+    if (user) {
+      // Redirect to the homepage
+      history.push('/chats'); // Replace '/' with the actual path of your homepage
+    }
+  }, [user, history]);
 
   const submitHandler = async () => {
     setLoading(true);
@@ -45,7 +56,8 @@ const Login = () => {
         { email, password },
         config
       );
-
+      
+      
       toast({
         title: "Login Successful",
         status: "success",
@@ -53,10 +65,11 @@ const Login = () => {
         isClosable: true,
         position: "bottom",
       });
+      login(data)
       //setUser(data);
-      localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
       history.push("/chats");
+      console.log('Backend Response:', data);
     } catch (error) {
       toast({
         title: "Error Occured!",

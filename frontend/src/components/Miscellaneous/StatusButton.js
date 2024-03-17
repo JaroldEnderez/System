@@ -3,38 +3,40 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Box, HStack, Text } from '@chakra-ui/react'
 import { AiOutlineTeam, AiFillSetting , AiFillCheckCircle , AiFillPauseCircle  } from "react-icons/ai";
+import { useProjectCount } from '../../Context/ProjectProvider'
 
 const StatusButton = ({ status }) => {
   let backgroundColor, icon, title, description;
+  const {Pending, Ongoing, Completed, Paused } = useProjectCount();
 
   // Set styles, icons, and titles based on the project status
   switch (status) {
     case 'Pending':
-      backgroundColor = 'pink.200';
+      backgroundColor = 'gray.200';
       icon = <AiOutlineTeam />;
-      title = 'Pending Projects';
-      description = 'Awaiting action';
+      title = `${Pending} Pending Projects`;
+      description = 'Awaiting approval';
       break;
     
     case 'Paused':
-      backgroundColor = 'orange.200';
-      icon = <AiFillPauseCircle  />;
-      title = 'Paused Projects';
+      backgroundColor = 'gray.200';
+      icon = <AiFillPauseCircle/>;
+      title = `${Paused} Paused Projects`;
       description = 'On hold';
       break;
   
     case 'Ongoing':
-      backgroundColor = 'blue.200';
+      backgroundColor = 'gray.200';
       icon = <AiFillSetting  />;
-      title = 'Ongoing Projects';
+      title = `${Ongoing} Ongoing Projects`;
       description = 'Active';
       break;
 
     case 'Completed':
-        backgroundColor = 'green.200';
+        backgroundColor = 'gray.200';
         icon = <AiFillCheckCircle  />;
-        title = 'Completed Projects';
-        description = 'On hold';
+        title = `${Completed} Completed Projects`;
+        description = 'Concluded';
         break;
     // Add more cases for other statuses
   }

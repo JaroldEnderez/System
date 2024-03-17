@@ -3,16 +3,24 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter} from 'react-router-dom';
+import ProjectProvider  from './Context/ProjectProvider';
+import UserProvider from './Context/UserProvider'; 
+import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+
     <BrowserRouter>
       <ChakraProvider>
-        <App />
+        <UserProvider>
+          <ProjectProvider>
+            <App/>
+          </ProjectProvider>
+        </UserProvider>
       </ChakraProvider>
     </BrowserRouter>
-  </React.StrictMode>
+
 );
 
 

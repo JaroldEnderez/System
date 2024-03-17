@@ -1,13 +1,15 @@
 const express = require("express")
-const {createProject, allProjects, editProject, addTask, pauseProject, byStatus, byPaused, getByStatus} = require("../controllers/projectController")
+const {createProject, allProjects, editProject, addTask,getTasks, findById, pauseProject, activeProjects , getByStatus,tasksByProject, deleteTask} = require("../controllers/projectController")
 const router = express.Router()
 
 router.route('/').post(createProject).get(allProjects)
+router.route('/:_id').get(findById)
 router.route('/edit/:_id').put(editProject)
-router.route('/:_id/tasks').post(addTask)
+router.route('/:_id/tasks').post(addTask).get(tasksByProject)
+router.route('/tasks').get(getTasks)
 router.route('/:_id/pause').put(pauseProject)
 router.route('/Status/:status').get(getByStatus)
-router.route('/pending').get(byStatus)
-router.route('/paused').get(byPaused)
+router.route('/exceptPending').get(activeProjects)
+router.route('/:projectId/tasks/:taskId').delete(deleteTask)
 
 module.exports = router
