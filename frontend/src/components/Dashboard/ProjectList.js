@@ -37,12 +37,8 @@ const ProjectList = () => {
     setSectionStates(Array(projects.length).fill(false));
   }, [projects]);
 
-  const handleToggleCollapse = (index) => {
-    setSectionStates((prevStates) => {
-      const newStates = [...prevStates];
-      newStates[index] = !newStates[index];
-      return newStates;
-    });
+  const handleClick = (projectId) => {
+    history.push(`/class/${projectId}`)
   };
   
   const handleEditProject = (projectId) => {
@@ -65,32 +61,16 @@ const ProjectList = () => {
                 <Heading paddingBottom='10'>Projects</Heading>
                 {/* Render dynamic collapsible sections based on projects */}
                 {projects.map((project, index) => (
-                  <div key={project.id}>
+                  <div key={project._id}>
                     <Flex justify="space-between" align="center" marginBottom="2">
                       <Button
-                        onClick={() => handleToggleCollapse(index)}
-                        leftIcon={sectionStates[index] ? <ChevronDownIcon /> : <ChevronUpIcon />}
+                        onClick={() => handleClick(project._id)}
+                        
                       >
                         {project.project_name}
                       </Button>
                     </Flex>
 
-            <Collapse in={sectionStates[index]}>
-              <Box p={4} borderWidth="1px" borderRadius="md">
-                <Heading>{`Project name: ${project.project_name}`}</Heading>
-                <Text>{`Location: ${project.street}, ${project.city}, ${project.province}`}</Text>
-                <Text>{`Contract: ${project.contract}`}</Text>
-                <Text>{`Contractor: ${project.contractor}`}</Text>
-                <Text>{`Procuring Entity: ${project.procuring_entity}`}</Text>
-                <Text>{`Status: ${project.status}`}</Text>
-                <Text>{`Created at: ${project.createdAt}`}</Text>
-
-                {/* Edit button inside the collapsible section */}
-                <Button onClick={() => handleEditProject(project._id)} colorScheme="blue" size="sm" marginTop="2">
-                  Edit
-                </Button>
-              </Box>
-            </Collapse>
     </div>
   ))}
   <br/>

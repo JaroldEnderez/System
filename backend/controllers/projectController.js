@@ -1,6 +1,9 @@
 const asyncHandler = require("express-async-handler")
 const Project = require("../models/projectModel")
 const Task = require("../models/taskModel")
+const Discussion = require("../models/discussionModel")
+const Comment = require("../models/commentModel")
+const User = require("../models/userModel")
 
 const createProject = asyncHandler(async (req, res) => {
   const {
@@ -107,7 +110,7 @@ const addTask = asyncHandler(async (req, res) => {
 
     // Create a new task object
     const newTask = new Task(taskDetails);
-
+    
     // Save the task to the database
     const savedTask = await newTask.save();
 
@@ -257,6 +260,7 @@ const deleteTask = asyncHandler(async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 
 module.exports = {deleteTask,tasksByProject, createProject,findById, allProjects, editProject, addTask, getTasks, pauseProject, activeProjects, getByStatus}

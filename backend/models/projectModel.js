@@ -1,5 +1,4 @@
 const mongoose = require("mongoose")
-const Task = require('./taskModel');
 
 const projectModel = mongoose.Schema(
     {
@@ -36,7 +35,8 @@ const projectModel = mongoose.Schema(
         tasks: [{type: mongoose.Schema.Types.ObjectId,
             ref: 'Task',}],
 
-        projectDescription: {type: String}
+        projectDescription: {type: String},
+        discussions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Discussion' }] // Array of discussion references
         
     },
     {

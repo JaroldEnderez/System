@@ -72,6 +72,44 @@ useEffect(() => {
     }
   };
 
+  useEffect(()=>{
+    gantt.config.columns = [
+      {name:"text",       label:"Task name",  width:110, tree:true },
+      {name:"start_date", label:"Start time", align:"center" },
+      {name:"duration",   label:"Duration",   align:"center", width:50   },
+      {name:"add",        label:"",           width:44 },
+      { name: 'task_owner', label: 'Assigned', align: 'center', width: 80 }
+  ];
+  }, [])
+
+  gantt.plugins({ 
+    tooltip: true 
+}); 
+
+  // Define tooltip template
+const tooltipTemplate = (task) => {
+  return `
+      <div>
+          <strong>Task ID:</strong> ${task._id}<br>
+          <strong>Task Name:</strong> ${task.text}<br>
+          <strong>Start Date:</strong> ${task.start_date}<br>
+          <strong>End Date:</strong> ${task.end_date}<br>
+          <!-- Add more task details as needed -->
+      </div>
+  `;
+};
+
+// Enable tooltip in Gantt chart configuration
+gantt.config.tooltip = {
+  html: (task) => {
+      return tooltipTemplate(task);
+  }
+};
+
+// Attach mouseover event to show tooltip on task hover
+
+
+
   const ProjectTabs = ({ projects }) => {
     const [selectedProjectId, setSelectedProjectId] = useState(projects.length > 0 ? projects[0]._id : null);
 

@@ -9,9 +9,10 @@ import { ChakraProvider } from '@chakra-ui/react';
 import ProjectsByStatus from './components/Dashboard/ProjectsByStatus';
 import Profile from './components/Dashboard/Profile'
 import Gantt from './components/Gantt/Gantt';
-import Tasks from './components/Dashboard/Tasks';
+import Admin from './components/Admin/admin'
 import CreateProject from './components/Dashboard/CreateProject';
 import EditProject from './components/Miscellaneous/EditProject';
+import Class from './components/Class'
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         <Route path="/tasks" component={Calendars}/>
         <Route path="/create" component={CreateProject}/>
         <Route path="/edit-project/:projectId" component={EditProject} />
+        <Route path="/admin" component={Admin}/>
+        <Route path="/class/:projectId" component={Class}/>
       </ChakraProvider>
     </>
     )

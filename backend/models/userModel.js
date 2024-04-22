@@ -14,6 +14,7 @@ const userModel = mongoose.Schema(
     },
     {
         timestamps:true,
+        role: {type:String, default:'user'}
     }
 )
 userModel.methods.matchPassword = async function(enteredPassword){
