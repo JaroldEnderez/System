@@ -14,10 +14,31 @@ const Calendars = () => {
   const [projects, setProjects] = useState([])
   const [currentZoom, setCurrentZoom] = useState('Days');
   const [messages, setMessages] = useState([]);
+  const [selectedOwner, setSelectedOwner] = useState('');
+  const [owners, setOwners] = useState([])
+   
   
-   //The empty dependency array ensures that the effect runs only once when the component mounts
+  
+  useEffect(() => {
+    // Replace this with your actual API call to fetch projects
+    const fetchUsers = async () => {
+      // Example: Fetching projects from an API
+      try {
+        const response = await fetch('/api/user');
+        const data = await response.json();
+        console.log(data)
+        setOwners(data);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    };
+  
+    fetchUsers();
+  }, []);
 
-useEffect(() => {
+  console.log(owners)
+  
+  useEffect(() => {
   // Replace this with your actual API call to fetch projects
   const fetchProjects = async () => {
     // Example: Fetching projects from an API
@@ -34,7 +55,13 @@ useEffect(() => {
   fetchProjects();
 }, []);
 
-  const addMessage = (message) => {
+const ownerEditor = {
+  type: "select",
+  map_to: "owner_id",
+  options: owners.map(owner => ({ key: owner._id, label: owner.name }))
+};
+
+const addMessage = (message) => {
     const maxLogLength = 5;
     const newMessage = { message };
     setMessages((prevMessages) => [newMessage, ...prevMessages.slice(0, maxLogLength - 1)]);
@@ -78,7 +105,7 @@ useEffect(() => {
       {name:"start_date", label:"Start time", align:"center" },
       {name:"duration",   label:"Duration",   align:"center", width:50   },
       {name:"add",        label:"",           width:44 },
-      { name: 'task_owner', label: 'Assigned', align: 'center', width: 80 }
+      { name: "owner_id", label: 'owner', width: 80, editor: ownerEditor }
   ];
   }, [])
 

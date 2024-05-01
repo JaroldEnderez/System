@@ -108,18 +108,18 @@ useEffect(() => {
               const userName = user.name; // Extract user's name
 
               // Fetch comments for the current discussion
-              const commentResponse = await axios.get(`/api/discussion/${discussion._id}/comments`);
-              const comments = commentResponse.data.map(comment => ({
-                  content: comment.content,
-                  author: comment.author,
-                  dateCreated: comment.dateCreated
-              }));
+              const commentResponse = await axios.get(`/api/discussions/${discussion._id}/comments`);
+              const comments = commentResponse.data;
 
               // Combine discussion, user, and comments data
               return {
                   ...discussion,
                   author: { name: userName },
-                  comments
+                  comments: comments.length > 0 ? comments.map(comment => ({
+                      content: comment.content,
+                      author: comment.author,
+                      dateCreated: comment.dateCreated
+                  })) : []
               };
           }));
 
@@ -132,6 +132,8 @@ useEffect(() => {
 
   fetchDiscussionsUsersAndComments();
 }, []);
+
+
 
   
   function formatDiscussionDate(postedDate) {
@@ -153,13 +155,14 @@ useEffect(() => {
     return postedDateTime.toLocaleDateString('en-US', options);
 }
 
+
 const handleReplySubmit = async (discussionId, replyContent) => {
-  console.log("Reply: ", replyContent, user._id)
+  console.log("Reply: ", replyContent, user._id, discussionId)
   
   try {
     // Send a POST request to your backend API endpoint
     const response = await axios.post("/api/comments", {
-      discussion: discussionId,
+      discussionId: discussionId,
       content: replyContent,
       author: user._id
     });
@@ -173,9 +176,6 @@ const handleReplySubmit = async (discussionId, replyContent) => {
   }
 };
 
-const fetchCommentsPerDiscussion = async() => {
-
-}
 
   return (
     <ChakraProvider theme={CustomTheme}>
@@ -209,6 +209,7 @@ const fetchCommentsPerDiscussion = async() => {
                               </Box>
                               <Box ml="3" mt="3" display="flex" alignItems="center"> {/* Use display="flex" to create a flex container */}
                                 <Textarea
+                                  key={index}
                                   placeholder="Reply here..."
                                   value={comments[index]}
                                   onChange={(e)=>{
@@ -220,8 +221,29 @@ const fetchCommentsPerDiscussion = async() => {
                                     onBlur={() => setFocusedIndex(-1)} // Reset focusedIndex when textarea loses focus
                                   flex="1" // Use flex="1" to allow the textarea to grow and fill the available space
                                 />
-                                <Button ml="2" onClick={()=>handleReplySubmit(discussion._id, comments[index])}><IoSend /></Button> {/* Use ml="2" to add some margin between the textarea and the button */}
+                                <Button ml="2" onClick={()=>handleReplySubmit(discussion._id, comments[index])}><IoSend /></Button> 
+                                  
                               </Box>
+                              <Box>
+                                    {discussion.comments.length>0 && (
+                                      <Text m='3' fontWeight='bold' textDecoration='underline'>Comments</Text>
+                                    )}
+
+                                    {discussion.comments.map(comment => (
+                                        <Box m='3' key={comment._id}>
+                                           <Box display='flex' alignItems='center'>
+                                            <Avatar name={comment.author.name}/>
+                                            <Box>
+                                              <Text ml='3' fontWeight='bold'>{comment.author.name}</Text>
+                                              <Text ml='3' fontSize="sm" opacity="0.6">{formatDiscussionDate(comment.createdAt)}</Text>
+                                            </Box>
+                                          </Box>
+                                          <Box ml="3" mt="3"> {/* Add mt="3" for margin-top */}
+                                            <Text>{comment.content}</Text>
+                                          </Box>
+                                        </Box>
+                                    ))}
+                                </Box>
                             </Box>
                           ))}
                           

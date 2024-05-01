@@ -37,7 +37,6 @@ const projectModel = mongoose.Schema(
 
         projectDescription: {type: String},
         discussions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Discussion' }] // Array of discussion references
-        
     },
     {
         timestamps:true,

@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler")
 const Discussion = require("../models/discussionModel")
+const Comment = require("../models/commentModel")
 
 const getDiscussions = asyncHandler(async (req, res) => {
     try {
@@ -37,21 +38,32 @@ const findDiscussion = asyncHandler(async (req, res) => {
 })
 
 const getComments = asyncHandler(async (req, res) => {
-  const discussionId = req.params._id
+  const discussionId = req.params._id;
 
   try {
-    const discussion = await Discussion.findById(discussionId)
+    // Fetch comments for the discussion from the database
+    const comments = await Comment.find({ discussion: discussionId }).populate('author', 'name');
 
-    const allComments = []
-    const comments = await Comment.find({ _id: { $in: discussion.comments } });
-      
-      // Append the tasks to the allTasks array
-      allComments.push(...comments);
-      res.json(allTasks);
-    }catch(error){
-      console.error(error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-})
+    // Construct the response payload with comments and user information
+    const commentsWithUserInfo = comments.map(comment => ({
+        _id: comment._id,
+        content: comment.content,
+        author: {
+            _id: comment.author._id,
+            name: comment.author.name
+        },
+        dateCreated: comment.dateCreated
+    }));
+
+    // Send the combined data as the API response
+    res.json(commentsWithUserInfo);
+} catch (error) {
+    console.error("Error fetching comments and user information: ", error);
+    res.status(500).json({ error: "Internal server error" });
+}
+});
+
+
+
 
 module.exports = {getDiscussions, createDiscussion, findDiscussion, getComments}
