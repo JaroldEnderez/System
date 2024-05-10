@@ -16,8 +16,14 @@ const Calendars = () => {
   const [messages, setMessages] = useState([]);
   const [selectedOwner, setSelectedOwner] = useState('');
   const [owners, setOwners] = useState([])
-   
   
+  
+  
+  const ownerEditor = {
+    type: "select",
+    map_to: "owner_id",
+    options: []
+  };
   
   useEffect(() => {
     // Replace this with your actual API call to fetch projects
@@ -28,11 +34,13 @@ const Calendars = () => {
         const data = await response.json();
         console.log(data)
         setOwners(data);
+
+        ownerEditor.options = data.map(owner=>({key: owner._id, label: owner.name}))
       } catch (error) {
         console.error('Error fetching projects:', error);
       }
     };
-  
+    
     fetchUsers();
   }, []);
 
@@ -54,12 +62,6 @@ const Calendars = () => {
 
   fetchProjects();
 }, []);
-
-const ownerEditor = {
-  type: "select",
-  map_to: "owner_id",
-  options: owners.map(owner => ({ key: owner._id, label: owner.name }))
-};
 
 const addMessage = (message) => {
     const maxLogLength = 5;
@@ -118,6 +120,7 @@ const tooltipTemplate = (task) => {
   return `
       <div>
           <strong>Task ID:</strong> ${task._id}<br>
+          <strong>Task Name:</strong> ${task.text}<br>
           <strong>Task Name:</strong> ${task.text}<br>
           <strong>Start Date:</strong> ${task.start_date}<br>
           <strong>End Date:</strong> ${task.end_date}<br>
@@ -178,8 +181,6 @@ gantt.config.tooltip = {
     return () => gantt.detachEvent(eventID);
   }, []);
 
-    
-    
     useEffect(() => {
       gantt.attachEvent("onAfterTaskDelete", (id, task) => {
         const taskId = task._id; // Remove the quotes around task._id
@@ -217,6 +218,41 @@ gantt.config.tooltip = {
       console.log(selectedProjectId)
     };
 
+
+    useEffect(() => {
+      // Define the onAfterTaskUpdate event handler
+      const handleTaskUpdate = async (id, task) => {
+        const taskId = task._id
+        try {
+          // Send an update request to your server/database
+          const response = await fetch(`/api/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(task),
+          });
+      
+          if (!response.ok) {
+            throw new Error('Failed to update task');
+          }
+      
+          console.log('Task updated:', id, task);
+        } catch (error) {
+          console.error('Error updating task:', error);
+        }
+      };
+      
+    
+      // Attach the event handler to the gantt chart
+      gantt.attachEvent("onAfterTaskUpdate", handleTaskUpdate);
+    
+      // Clean up by detaching the event handler when the component unmounts
+      return () => {
+        gantt.detachEvent("onAfterTaskUpdate", handleTaskUpdate);
+      };
+    }, []);
+    
     return (
 
         <Tabs variant='enclosed-colored'>

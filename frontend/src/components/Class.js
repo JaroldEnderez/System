@@ -2,7 +2,7 @@ import React, { useState,useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 import {
   ChakraProvider,
-  
+  Link,
   Flex,
   VStack,
   Box,
@@ -43,10 +43,17 @@ const AdminPanel= () => {
       }, []);
 
         return (
-          <Box maxW="800px" mx="auto" p="20px" bg="white" borderWidth='1px' borderRadius="lg" boxShadow="inner" mb="20px">
-            <Heading as="h2" fontSize="xl" fontWeight="bold" mb="20px">
-              {`${project.project_name}`}
-            </Heading>
+          <Box minW="300px" maxW="800px" mx="auto" p="20px" bg="white" borderWidth='1px' borderRadius="lg" boxShadow="inner" mb="20px">
+            <Flex justifyContent="space-between">
+              <Heading as="h2" fontSize="xl" fontWeight="bold" mb="20px">
+                {`${project.project_name}`}
+              </Heading>
+              <Link href="#" textDecoration="bold" _hover={{ textDecoration: "none" }}>
+                <Text as="span" cursor="pointer" color='teal' fontWeight='bold'>
+                  See Milestones
+                </Text>
+              </Link>
+            </Flex>
             <Box mb="20px">
               <Text fontWeight="bold">Location:</Text>
               <Text>{`${project.street}`}, {`${project.city}`}, {`${project.province}`}</Text>
@@ -86,12 +93,29 @@ function App() {
   const { projectId } = useParams(); // This line extracts projectId from the URL
   const [comments, setComments] = useState(Array(discussions.length).fill(""));
   const [focusedIndex, setFocusedIndex] = useState(-1); // Initialize with -1 to indicate no focus initially
+  const [project,setProject] = useState('')
 
 // Function to handle focus on a specific textarea
 const handleTextareaFocus = (index) => {
   setFocusedIndex(index);
 };
 
+useEffect(() => {
+  // Replace this with your actual API call to fetch projects
+  const fetchProject = async () => {
+    // Example: Fetching projects from an API
+    try {
+      const response = await fetch(`/api/project/${projectId}`);
+      const data = await response.json();
+      console.log(data)
+      setProject(data);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    }
+  };
+  
+  fetchProject();
+}, []);
   
 useEffect(() => {
   const fetchDiscussionsUsersAndComments = async () => {
@@ -192,9 +216,17 @@ const handleReplySubmit = async (discussionId, replyContent) => {
                     
                       <AdminPanel mr='10' />
                       <Box paddingLeft='5'paddingRight='5' >
-                        <Discussion projectId={projectId} />
+                        <Box  mx="auto" p="20px" bg="white" borderWidth='1px' borderRadius="lg" boxShadow="inner" mb="20px">
+                        <Heading as="h2" fontSize="xl" fontWeight="bold" mb="20px">Description</Heading>
+                          <Text>{   project.projectDescription} Lorem ipsum odor amet, consectetuer adipiscing elit. Ac purus in massa egestas mollis varius;
+                                dignissim elementum. Mollis tincidunt mattis hendrerit dolor eros enim, nisi ligula ornare.
+                                Hendrerit parturient habitant pharetra rutrum gravida porttitor eros feugiat. Mollis elit
+                                sodales taciti duis praesent id. Consequat urna vitae morbi nunc congue.</Text>
+                        </Box>
                         <Box>
-                          <Heading as="h2" size="lg" mb="4">Discussions for Project {projectId}</Heading>
+                        <Discussion projectId={projectId}/>
+                        <Heading as="h2" size="lg" mb="4">Discussions for Project {project.project_name}</Heading>
+
                           {discussions.slice().reverse().map((discussion,index) => (   
                             <Box key={discussion._id} borderWidth="1px" borderRadius="lg" p="4" mb="4" display='block'>
                               <Box display='flex' alignItems='center'>

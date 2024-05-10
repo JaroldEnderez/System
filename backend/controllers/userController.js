@@ -112,4 +112,35 @@ const getUserById = asyncHandler(async(req,res) =>{
 
 })
 
-module.exports = {registerUser, authUser, allUsers,updateExistingUsers, getUserById}
+const validateUserRole = asyncHandler(async(req,res) => {
+  const { role} = req.body;
+  const userId = req.params._id
+  const allowedRoles = ['user', 'project manager', 'client', 'admin'];
+
+
+  try{
+    if (!allowedRoles.includes(role)) {
+      return res.status(400).json({ error: 'Invalid role value' });
+    }
+
+    const user = await User.findById(userId)
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    user.role = role
+    await user.save();
+    
+
+    return res.status(200).json({ message: 'User role updated successfully', user });
+
+  } catch (error){
+    console.error("Error updating user role", error)
+    return res.status(500).json({ error: 'Failed to update user role' });
+  }
+  // Check if the role is included in the allowed enum values
+
+  // If the role is valid, proceed to the next middleware or route handler
+});
+
+module.exports = {registerUser, authUser, allUsers,updateExistingUsers, getUserById, validateUserRole}

@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import Project_Modal from './Modal/Project_Modal' 
 import { UserAuth } from '../Context/UserProvider';
 import Logo from '../assets/images/logo.jpg'
-
+import EnterProject from './Dashboard/EnterProject';
 
 const Header = () => {
   const { logout } = UserAuth();
@@ -53,7 +53,9 @@ const Header = () => {
 
       <Box >
       <Flex align="center">
+        <EnterProject/>
         <Link to="/create" >
+          
           <Button mr={4} colorScheme="teal">Create New Project</Button>
         </Link>
         {/* User Icon */}

@@ -25,7 +25,7 @@ const DiscussionBox = ({projectId}) => {
   }
 
   return (
-    <Box borderWidth="1px" borderRadius="lg" p="4" width='100%' display='flex' alignItems='center'>
+    <Box borderWidth="1px" borderRadius="lg" p="4" width='100%' display='flex' alignItems='center' mb='20px'>
           <Avatar name={user.name} size="sm" mr="2" />
           <Textarea 
           placeholder="Post an announcement..." 

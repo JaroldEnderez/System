@@ -52,6 +52,8 @@ function AdminPanel() {
     const query = event.target.value;
     setSearchQuery(query);
     console.log(query)
+    setFormData({ ...formData, username: searchQuery});
+    console.log(formData)
     // Here you would typically fetch suggestions from your database or data source
     // For demo purposes, I'm using a simple filtering method with mock data
   };
@@ -60,13 +62,32 @@ function AdminPanel() {
   
   const handleSubmit = (e) => {
     e.preventDefault();
-    // For demonstration purpose, just log the form data
-    console.log(formData);
-    // Reset form fields after submission
-    setFormData({ username: '', role: '' });
+    
+    // Find the user with the selected name
+    const selectedUser = users.find(user => user.name === formData.username);
+
+    // Update the role of the selected user
+    if (selectedUser) {
+      // Assuming you have a function to update the user role, update it here
+      // updateUserRole(selectedUser._id, formData.role);
+      console.log(`Role ${formData.role} set for user ${selectedUser.name}`);
+    } else {
+      console.log(`User with name ${formData.username} not found.`);
+    }
   };
 
+const handleRoleChange = (e) => {
+  setFormData({ ...formData, role: e.target.value });
+}
 
+const handleUserSelect = (selectedUsername) => {
+  // Update search query for visual feedback (optional)
+  setSearchQuery('');
+  // Update the formData state immediately with the selected username
+  setFormData({ ...formData, username: selectedUsername });
+  setSearchQuery(selectedUsername)
+  console.log(formData)
+};
 
   return (
     
@@ -114,23 +135,25 @@ function AdminPanel() {
             <div style={{ backgroundColor: searchQuery && users.filter(user => user.name.startsWith(searchQuery)).length > 0 ? 'lightgray' : 'transparent'}}>
               { 
                 searchQuery && users.filter(user => user.name.startsWith(searchQuery)).map((user)=>(
-                <div style={{marginLeft:15, cursor:'pointer'}} key={user._id} onClick={(e) => setSearchQuery(user.name)}>
+                <div onClick={(e) => handleUserSelect(user.name)} style={{marginLeft:15, cursor:'pointer'}} key={user._id}>
                   {user.name}<hr/>
                 </div>)
               )}
             </div>
         </FormControl>
-        <FormControl id="role" mt={4}>
+        <FormControl id="role" mt={4}>  
           <FormLabel>Role</FormLabel>
           <Select
             name="role"
             value={formData.role}
-            onChange={handleInputChange}
+            onChange={handleRoleChange}
             placeholder="Select Role"
             required
           >
             <option value="Admin">Admin</option>
-            <option value="Moderator">Project Manager </option>
+            <option value="Project Manager">Project Manager </option>
+            <option value="Engineer">Engineer</option>
+            <option value="Supervisor">Supervisor</option>
             <option value="User">User</option>
           </Select>
         </FormControl>

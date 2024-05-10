@@ -51,50 +51,38 @@ const ProjectsByStatus = () => {
 
   return (
     <ChakraProvider theme={CustomTheme}>
-      <Flex direction="row">
+      <Flex direction="row" >
         <Sidebar />
-          <VStack
+        <VStack
             align="flex-start" // Set vertical alignment to flex-start
             height="100vh"    // Set a height for the container (adjust as needed)           // Allow the VStack to grow and take remaining horizontal space
             overflowX="auto"
             width="100%"
-            >
-            <Header/>
+        >
+        <Header/>
             
             <Box padding='4' paddingBottom='4'>
-  <Heading paddingBottom='10'>{status} Projects</Heading>
-  {/* Render dynamic collapsible sections based on projects */}
-  {projects.map((project, index) => (
-    <div key={project.id}>
-      <Flex justify="space-between" align="center" marginBottom="2">
-        <Button
-          onClick={() => handleToggleCollapse(index)}
-          leftIcon={sectionStates[index] ? <ChevronDownIcon /> : <ChevronUpIcon />}
-        >
-          {project.project_name}
-        </Button>
-      </Flex>
+            <Heading paddingBottom='10'>{status} Projects</Heading>
+            {/* Render dynamic collapsible sections based on projects */}
+                <Flex flexWrap='wrap' height='100%' width='80vw'  justifyContent='space-between'>
 
-      <Collapse in={sectionStates[index]}>
-        <Box p={4} borderWidth="1px" borderRadius="md">
-          <Heading>{`Project name: ${project.project_name}`}</Heading>
-          <Text>{`Location: ${project.street}, ${project.city}, ${project.province}`}</Text>
-          <Text>{`Contract: ${project.contract}`}</Text>
-          <Text>{`Contractor: ${project.contractor}`}</Text>
-          <Text>{`Procuring Entity: ${project.procuring_entity}`}</Text>
-          <Text>{`Status: ${project.status}`}</Text>
-          <Text>{`Created at: ${project.createdAt}`}</Text>
+            {projects.map((project, index) => (
 
-          {/* Edit button inside the collapsible section */}
-          <Button onClick={() => handleEditProject(project._id)} colorScheme="blue" size="sm" marginTop="2">
-            Edit
-          </Button>
-        </Box>
-      </Collapse>
-    </div>
-  ))}
-  <br/>
-</Box>
+                  <Box p={4} width="350px" height='150px' borderWidth="1px" borderRadius="md" >
+                    <Heading>{project.project_name}</Heading>
+                    <Text>{project.projectDescription}</Text>
+                    
+
+                    {/* Edit button inside the collapsible section */}
+                    <Button onClick={() => handleEditProject(project._id)} colorScheme="blue" size="sm" marginTop="2">
+                      Edit
+                    </Button>
+                  </Box>
+
+            ))}
+                </Flex>
+            <br/>
+          </Box>
           </VStack>
       </Flex>
     </ChakraProvider>

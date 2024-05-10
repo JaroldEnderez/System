@@ -7,6 +7,10 @@ const userModel = mongoose.Schema(
         email: {type:String, required:true, unique:true},
         contact: {type:String, required:true, unique:true},
         password: {type:String, required:true},
+        role:{type: String,
+            enum: ['user', 'project manager', 'client', 'admin'], // Add more roles as needed
+            default: 'user' // Set a default role if needed
+        }, 
         pic:{
             type: String,
             default: "https://icon-library.com/icon/anonymous-avatar-icon-25.html"
@@ -14,7 +18,6 @@ const userModel = mongoose.Schema(
     },
     {
         timestamps:true,
-        role: {type:String, default:'user'}
     }
 )
 userModel.methods.matchPassword = async function(enteredPassword){

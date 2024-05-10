@@ -36,7 +36,14 @@ const projectModel = mongoose.Schema(
             ref: 'Task',}],
 
         projectDescription: {type: String},
-        discussions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Discussion' }] // Array of discussion references
+        discussions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Discussion' }],
+        milestones: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Milestone'
+          }]
+    
+    
+    
     },
     {
         timestamps:true,
