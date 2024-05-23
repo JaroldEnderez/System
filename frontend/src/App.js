@@ -12,7 +12,10 @@ import Gantt from './components/Gantt/Gantt';
 import Admin from './components/Admin/admin'
 import CreateProject from './components/Dashboard/CreateProject';
 import EditProject from './components/Miscellaneous/EditProject';
-import Class from './components/Class'
+import Class from './pages/Class'
+import Milestones from './pages/Milestones';
+// import Progress from './components/Progress';
+import TodoList from './components/Miscellaneous/TodoList';
 
 function App() {
   return (
@@ -23,14 +26,18 @@ function App() {
         <Route path="/clients" component={Clients}/>
         <Route path="/projects/:status" component={ProjectsByStatus} exact/>      
         <Route path="/projects" component={ProjectList} exact/>
-        <Route path="/calendars" component={Calendars}/>
+     
         <Route path="/profile" component={Profile}/>
         <Route path="/gantt" component={Gantt}/>
         <Route path="/tasks" component={Calendars}/>
         <Route path="/create" component={CreateProject}/>
         <Route path="/edit-project/:projectId" component={EditProject} />
         <Route path="/admin" component={Admin}/>
-        <Route path="/class/:projectId" component={Class}/>
+        <Route path="/class/:projectId/milestones" component={Milestones} exact/>
+        <Route path="/class/:projectId" component={Class} exact/>
+        {/* <Route path="/progress" component={Progress}/> */}
+        <Route path="/todo" component={TodoList}/>
+
       </ChakraProvider>
     </>
     )

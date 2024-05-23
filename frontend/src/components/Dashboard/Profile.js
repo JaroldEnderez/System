@@ -9,7 +9,11 @@ import { UserAuth } from '../../Context/UserProvider';
 
 const Profile = () => {
 const {user} = UserAuth()
+const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+const toggleSidebar = () => {
+  setIsSidebarOpen(!isSidebarOpen);
+}
   return (
     <ChakraProvider theme={CustomTheme}>
       <Flex direction='row'>

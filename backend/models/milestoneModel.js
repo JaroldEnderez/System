@@ -17,8 +17,8 @@ const milestoneSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['planned', 'in progress', 'completed', 'delayed'],
-    default: 'planned'
+    enum: ['ongoing', 'completed', 'delayed'],
+    default: 'ongoing'
   },
   project: {
     type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +28,12 @@ const milestoneSchema = new mongoose.Schema({
   dependencies: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Milestone'
-  }]
+  }],
+  tasks: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Task',
+    required: true
+  },
 });
 
 const Milestone = mongoose.model('Milestone', milestoneSchema);

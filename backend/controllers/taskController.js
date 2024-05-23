@@ -12,12 +12,22 @@ const getTasks = asyncHandler(async(req,res) =>{
   }
 }) 
 
-const addTasks = asyncHandler(async(req,res) =>{
+const addTasks = asyncHandler(async (req, res) => {
   try {
-    const newTask = new Task(req.body);
-    await newTask.save();
+    const { owner, ...taskDetails } = req.body; // Destructure owner and get the rest of the fields
 
+    // If owner is not provided or is an empty array, set it to an empty array
+    const taskOwner = owner.length > 0 ? owner : [];
+
+    // Create a new task instance with the appropriate owner
+    const newTask = new Task({
+      ...taskDetails,
+      owner: taskOwner,
+    });
+
+    await newTask.save();
     res.status(201).json(newTask); // Respond with the created task
+
   } catch (error) {
     console.error('Error creating task', error);
     res.status(500).send('Internal Server Error');
@@ -72,6 +82,10 @@ const editTask = asyncHandler(async (req, res) => {
     }
     if (updatedTaskData.progress) {
       task.progress = updatedTaskData.progress;
+    }
+
+    if (updatedTaskData.owner) {
+      task.owner = updatedTaskData.owner;
     }
     // Add more properties as needed
 

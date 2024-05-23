@@ -12,7 +12,11 @@ const ProjectList = () => {
   const [projects, setProjects] = useState([]);
   const [sectionStates, setSectionStates] = useState([]);
   const history = useHistory();  // Initialize useHistory
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  }
   
   // Simulating fetching projects from the database
   useEffect(() => {

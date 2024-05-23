@@ -17,13 +17,25 @@ const Calendars = () => {
   const [selectedOwner, setSelectedOwner] = useState('');
   const [owners, setOwners] = useState([])
   
-  
+  var labels = gantt.locale.labels;
+  gantt.locale.labels.column_owner = labels.section_owner= "Owner";
+  gantt.locale.labels["section_parent"] = "Parent task";
+  gantt.locale.labels["section_text"] = "Task name";
+  gantt.templates.rightside_text = function (start, end, task) {
+		if (task.type == "milestone") {
+			return task.text;
+		}
+		return "";
+	};
+
   
   const ownerEditor = {
     type: "select",
     map_to: "owner_id",
     options: []
   };
+
+  
   
   useEffect(() => {
     // Replace this with your actual API call to fetch projects
@@ -33,9 +45,37 @@ const Calendars = () => {
         const response = await fetch('/api/user');
         const data = await response.json();
         console.log(data)
-        setOwners(data);
 
-        ownerEditor.options = data.map(owner=>({key: owner._id, label: owner.name}))
+        const staffList = data.map(staffMember => ({
+          key: staffMember._id,
+          label: staffMember.name,
+          backgroundColor: "#f57730",
+          textColor: "#FFF"
+        }));
+        console.log(staffList)
+
+        gantt.config.columns = [
+          {name:"text",       label:"Task name",  width:110, tree:true },
+          {name:"start_date", label:"Start time", align:"center" },
+          {name:"duration",   label:"Duration",   align:"center", width:50   },
+          {name:"add",        label:"",           width:44 },
+          { name: 'owner', label: 'Owner', align: 'center', template: function (task) {
+            const owner = gantt.serverList('staff').find(o => o.key === task.owner);
+            return owner ? owner.label : '';
+          }}
+      ];
+    
+      gantt.config.lightbox.sections = [
+        { name: 'task_name', height: 70, map_to: 'text', type: 'textarea', focus: true},
+        { name: 'description', height: 70, map_to: 'description', type: 'textarea', focus: true },
+        {name: "type", type: "typeselect", map_to: "type"},
+        {name: "owner", height: 22, map_to: "owner", type: "select", options: gantt.serverList("staff")},
+        {name: 'time', type: 'duration', map_to: 'auto' }
+        // Add more sections as needed
+      ];
+        // Populate the gantt.serverList
+        gantt.serverList('staff', staffList);
+
       } catch (error) {
         console.error('Error fetching projects:', error);
       }
@@ -44,7 +84,7 @@ const Calendars = () => {
     fetchUsers();
   }, []);
 
-  console.log(owners)
+  
   
   useEffect(() => {
   // Replace this with your actual API call to fetch projects
@@ -100,16 +140,17 @@ const addMessage = (message) => {
       console.error('Fullscreen extension not available');
     }
   };
+  
+  function byId(list, id) {
+		for (var i = 0; i < list.length; i++) {
+			if (list[i].key == id)
+				return list[i].label || "";
+		}
+		return "";
+	}
+  
 
-  useEffect(()=>{
-    gantt.config.columns = [
-      {name:"text",       label:"Task name",  width:110, tree:true },
-      {name:"start_date", label:"Start time", align:"center" },
-      {name:"duration",   label:"Duration",   align:"center", width:50   },
-      {name:"add",        label:"",           width:44 },
-      { name: "owner_id", label: 'owner', width: 80, editor: ownerEditor }
-  ];
-  }, [])
+
 
   gantt.plugins({ 
     tooltip: true 
@@ -156,6 +197,11 @@ gantt.config.tooltip = {
       const currentProjectId = selectedProjectIdRef.current;
       task.projectId = selectedProjectId
       console.log("Project ID for task creation: ", currentProjectId);
+// Check if the task has a parent
+    const ownerArray = task.owner === '' ? [] : task.owner;
+
+      task.owner = ownerArray
+      console.log(task) // Ensure owner is either a valid ID or an empty array
 
       // Make API request to add task to the selected project
       fetch(`/api/project/${currentProjectId}/tasks`, {

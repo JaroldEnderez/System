@@ -16,7 +16,11 @@ const Tasks = () => {
   const handleUpdateProjectIdOptions = (options) => {
     setProjectIdOptions(options);
   };
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  }
   
   const [tasks, setTasks] = useState({
     data: [],
@@ -176,14 +180,14 @@ gantt.locale.labels.section_projectId =  "Project ID";
   return (
     <ChakraProvider theme={CustomTheme}>
         <Flex direction="row">
-            <Sidebar />
+          <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar}/>
               <VStack
                 align="flex-start" // Set vertical alignment to flex-start
                 height="100vh"    // Set a height for the container (adjust as needed)           // Allow the VStack to grow and take remaining horizontal space
                 overflowX="auto"
                 width="100%"
                 >
-                <Header/>
+                <Header toggleSidebar={toggleSidebar}/>
                   <Box padding='4' paddingBottom='4' width='100%'>
                     <Heading paddingBottom='10'>Tasks</Heading>
                   

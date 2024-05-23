@@ -7,7 +7,12 @@ const taskModel = mongoose.Schema(
         start_date: {type:Date},
         duration: {type:Number},
         projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Project', required:true},
-        progress: {type: mongoose.Schema.Types.Decimal128, default:0}
+        progress: {type: mongoose.Schema.Types.Decimal128, default:0},
+        type:{type: String},
+        owner:[{ 
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+          }],
     },
     {
         timestamps:true,

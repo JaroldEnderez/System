@@ -7,6 +7,7 @@ import Header from '../Header';
 import { useHistory } from 'react-router-dom';  // Import useHistory
 import Sidebar from '../Sidebar2/Sidebar';
 import CustomTheme from '../../CustomTheme';
+import ProjectCard from '../Cards/ProjectCard';
 
 const ProjectsByStatus = () => {
   const { status } = useParams();
@@ -61,24 +62,14 @@ const ProjectsByStatus = () => {
         >
         <Header/>
             
-            <Box padding='4' paddingBottom='4'>
+            <Box padding='4' paddingBottom='4' textAlign='center'>
             <Heading paddingBottom='10'>{status} Projects</Heading>
             {/* Render dynamic collapsible sections based on projects */}
-                <Flex flexWrap='wrap' height='100%' width='80vw'  justifyContent='space-between'>
+                <Flex flexWrap='wrap' height='100%' width='100%'  justifyContent='space-evenly'>
 
             {projects.map((project, index) => (
 
-                  <Box p={4} width="350px" height='150px' borderWidth="1px" borderRadius="md" >
-                    <Heading>{project.project_name}</Heading>
-                    <Text>{project.projectDescription}</Text>
-                    
-
-                    {/* Edit button inside the collapsible section */}
-                    <Button onClick={() => handleEditProject(project._id)} colorScheme="blue" size="sm" marginTop="2">
-                      Edit
-                    </Button>
-                  </Box>
-
+                  <ProjectCard/>
             ))}
                 </Flex>
             <br/>
