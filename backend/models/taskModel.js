@@ -2,6 +2,7 @@ const mongoose = require("mongoose")
 
 const taskModel = mongoose.Schema(
     {   
+        id: {type:String, required:true},
         text: {type:String, trim:true},
         description: {type:String, trim:true}, 
         start_date: {type:Date},
@@ -13,6 +14,7 @@ const taskModel = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',
           }],
+        parent:{type:String}
     },
     {
         timestamps:true,

@@ -1,6 +1,6 @@
 // ProjectList.js
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { VStack, Text, ChakraProvider, Box, Heading, Button, Collapse, Flex} from '@chakra-ui/react';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import Header from '../Header';
@@ -68,8 +68,9 @@ const ProjectsByStatus = () => {
                 <Flex flexWrap='wrap' height='100%' width='100%'  justifyContent='space-evenly'>
 
             {projects.map((project, index) => (
-
-                  <ProjectCard/>
+                  <Link to={`/class/${project._id}`}>
+                    <ProjectCard project={project}/>
+                  </Link>
             ))}
                 </Flex>
             <br/>

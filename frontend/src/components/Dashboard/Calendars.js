@@ -16,6 +16,7 @@ const Calendars = () => {
   const [messages, setMessages] = useState([]);
   const [selectedOwner, setSelectedOwner] = useState('');
   const [owners, setOwners] = useState([])
+  const [selectedTask, setSelectedTask] = useState('')
   
   var labels = gantt.locale.labels;
   gantt.locale.labels.column_owner = labels.section_owner= "Owner";
@@ -66,9 +67,8 @@ const Calendars = () => {
       ];
     
       gantt.config.lightbox.sections = [
-        { name: 'task_name', height: 70, map_to: 'text', type: 'textarea', focus: true},
+        { name: 'text', height: 70, map_to: 'text', type: 'textarea', focus: true},
         { name: 'description', height: 70, map_to: 'description', type: 'textarea', focus: true },
-        {name: "type", type: "typeselect", map_to: "type"},
         {name: "owner", height: 22, map_to: "owner", type: "select", options: gantt.serverList("staff")},
         {name: 'time', type: 'duration', map_to: 'auto' }
         // Add more sections as needed
@@ -195,13 +195,16 @@ gantt.config.tooltip = {
     const handleAfterTaskAdd = (id, task) => {
       // Use the current project ID from the ref
       const currentProjectId = selectedProjectIdRef.current;
-      task.projectId = selectedProjectId
+      task.projectId = currentProjectId;
+      task.ganttId = id; // Use Gantt chart's task ID
       console.log("Project ID for task creation: ", currentProjectId);
-// Check if the task has a parent
-    const ownerArray = task.owner === '' ? [] : task.owner;
+      
+      // Ensure owner is either a valid ID or an empty array
+      const ownerArray = task.owner === '' ? [] : task.owner;
+      task.owner = ownerArray;
+     
 
-      task.owner = ownerArray
-      console.log(task) // Ensure owner is either a valid ID or an empty array
+      console.log(task);// Ensure owner is either a valid ID or an empty array
 
       // Make API request to add task to the selected project
       fetch(`/api/project/${currentProjectId}/tasks`, {
@@ -299,6 +302,15 @@ gantt.config.tooltip = {
       };
     }, []);
     
+    gantt.attachEvent("onTaskClick", function(id, e){
+      // Access the task ID
+      console.log("Clicked Task ID: ", id);
+      setSelectedTask(id)
+      // You can perform any custom logic here
+      
+      // Return true to allow the default behavior (task selection)
+      return true;
+  });
     return (
 
         <Tabs variant='enclosed-colored'>

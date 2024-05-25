@@ -1,7 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Text, Image,Flex, Heading } from '@chakra-ui/react';
+import moment from 'moment';
 
-const ProjectCard = () => {
+
+const ProjectCard = ({project}) => {
+  const formattedDate = moment(project.createdAt).format('DD/MM/YYYY');
+
+  const [taskCount, setTaskCount] = useState(0);
+
+  useEffect(() => {
+    const fetchTaskCount = async () => {
+      try {
+        const response = await fetch(`/api/project/${project._id}/tasks`);
+        if (response.ok) {
+          const tasks = await response.json();
+          // Count the number of tasks
+          const numberOfTasks = tasks.length;
+          setTaskCount(numberOfTasks);
+        } else {
+          // Handle error response
+          console.error('Failed to fetch tasks:', response.statusText);
+        }
+      } catch (error) {
+        // Handle fetch error
+        console.error('Error fetching tasks:', error);
+      }
+    };
+
+    fetchTaskCount();
+
+    // Clean up function (optional)
+    return () => {
+      // Any cleanup code if needed
+    };
+  }, [project]); // Only re-run the effect if projectId changes
+
   return (
     <Box maxW= '300px' 
          maxH='600px' 
@@ -20,10 +53,10 @@ const ProjectCard = () => {
               boxShadow: '10px 10px 28px -2px rgba(0, 0, 0, 0.75)',
             }
           }}>
-        <Text color= 'rgb(248, 51, 84)' font-weight= '600'>6/6/26    </Text>
-        <Heading as="h1"  p= '0px 0px 20px 0px'>Construction Title</Heading>
+        <Text color= 'rgb(248, 51, 84)' font-weight= '600'>{formattedDate}   </Text>
+        <Box width='100%' height='100px'><Heading as="h1"  p= '0px 0px 20px 0px'>{project.project_name}</Heading></Box>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <Box>
+        <Box marginTop='30px'>
             <Flex 
             borderRadius="0px 0px 15px 15px"
             justifyContent="space-between"
@@ -33,7 +66,7 @@ const ProjectCard = () => {
             bg="rgb(240, 54, 85)"
             color="white">
                 <Box>
-                    <Text>4</Text>
+                    <Text>{taskCount}</Text>
                     <Text>Tasks</Text>
                 </Box>
                 <Box>

@@ -14,7 +14,7 @@ const getTasks = asyncHandler(async(req,res) =>{
 
 const addTasks = asyncHandler(async (req, res) => {
   try {
-    const { owner, ...taskDetails } = req.body; // Destructure owner and get the rest of the fields
+    const { parentTaskId, id,owner, ...taskDetails } = req.body; // Destructure owner and get the rest of the fields
 
     // If owner is not provided or is an empty array, set it to an empty array
     const taskOwner = owner.length > 0 ? owner : [];
@@ -23,6 +23,8 @@ const addTasks = asyncHandler(async (req, res) => {
     const newTask = new Task({
       ...taskDetails,
       owner: taskOwner,
+      id,
+      parent:parentTaskId || null
     });
 
     await newTask.save();

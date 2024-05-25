@@ -14,6 +14,7 @@ import CreateProject from './components/Dashboard/CreateProject';
 import EditProject from './components/Miscellaneous/EditProject';
 import Class from './pages/Class'
 import Milestones from './pages/Milestones';
+import Kanban from './components/Kanban'
 // import Progress from './components/Progress';
 import TodoList from './components/Miscellaneous/TodoList';
 
@@ -26,7 +27,6 @@ function App() {
         <Route path="/clients" component={Clients}/>
         <Route path="/projects/:status" component={ProjectsByStatus} exact/>      
         <Route path="/projects" component={ProjectList} exact/>
-     
         <Route path="/profile" component={Profile}/>
         <Route path="/gantt" component={Gantt}/>
         <Route path="/tasks" component={Calendars}/>
@@ -35,6 +35,7 @@ function App() {
         <Route path="/admin" component={Admin}/>
         <Route path="/class/:projectId/milestones" component={Milestones} exact/>
         <Route path="/class/:projectId" component={Class} exact/>
+        <Route path="/kanban" component={Kanban}/>
         {/* <Route path="/progress" component={Progress}/> */}
         <Route path="/todo" component={TodoList}/>
 
