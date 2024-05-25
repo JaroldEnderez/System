@@ -1,0 +1,29 @@
+{
+  "name": "sm-and-mst",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon backend/server.js"
+  },
+  "author": "Jarold Enderez",
+  "license": "ISC",
+  "dependencies": {
+    "@dhtmlx/trial-react-gantt": "^1.1.4",
+    "axios": "^1.6.2",
+    "bcryptjs": "^2.4.3",
+    "cloudinary-react": "^1.8.1",
+    "cors": "^2.8.5",
+    "dhtmlx-gantt": "^8.0.6",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.2",
+    "nodemon": "^3.0.2",
+    "react-big-calendar": "^1.8.5",
+    "react-google-charts": "^4.0.1",
+    "react-google-maps-api": "^1.0.8"
+  }
+}
