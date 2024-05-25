@@ -63,7 +63,25 @@ const getComments = asyncHandler(async (req, res) => {
 }
 });
 
+<<<<<<< HEAD
 
 
 
 module.exports = {getDiscussions, createDiscussion, findDiscussion, getComments}
+=======
+const getDiscussionsByProjectId = asyncHandler(async (req, res) => {
+  // Extract the project ID from the request parameters
+  const projectId = req.params._id;
+
+  // Fetch discussions by project ID from the database
+  const discussions = await Discussion.find({ projectId});
+
+  // Respond with the list of discussions
+  res.json(discussions);
+});
+
+
+
+
+module.exports = {getDiscussions, createDiscussion, findDiscussion, getComments, getDiscussionsByProjectId}
+>>>>>>> 7d351daea0ed1c782b362561355a503e28183acf

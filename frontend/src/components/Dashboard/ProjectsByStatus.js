@@ -7,6 +7,10 @@ import Header from '../Header';
 import { useHistory } from 'react-router-dom';  // Import useHistory
 import Sidebar from '../Sidebar2/Sidebar';
 import CustomTheme from '../../CustomTheme';
+<<<<<<< HEAD
+=======
+import ProjectCard from '../Cards/ProjectCard';
+>>>>>>> 7d351daea0ed1c782b362561355a503e28183acf
 
 const ProjectsByStatus = () => {
   const { status } = useParams();
@@ -61,6 +65,7 @@ const ProjectsByStatus = () => {
         >
         <Header/>
             
+<<<<<<< HEAD
             <Box padding='4' paddingBottom='4'>
             <Heading paddingBottom='10'>{status} Projects</Heading>
             {/* Render dynamic collapsible sections based on projects */}
@@ -79,6 +84,16 @@ const ProjectsByStatus = () => {
                     </Button>
                   </Box>
 
+=======
+            <Box padding='4' paddingBottom='4' textAlign='center'>
+            <Heading paddingBottom='10'>{status} Projects</Heading>
+            {/* Render dynamic collapsible sections based on projects */}
+                <Flex flexWrap='wrap' height='100%' width='100%'  justifyContent='space-evenly'>
+
+            {projects.map((project, index) => (
+
+                  <ProjectCard/>
+>>>>>>> 7d351daea0ed1c782b362561355a503e28183acf
             ))}
                 </Flex>
             <br/>

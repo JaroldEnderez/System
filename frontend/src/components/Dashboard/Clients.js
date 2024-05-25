@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Heading, List, ListItem } from '@chakra-ui/react';
 import Calendars from './Calendars'
+<<<<<<< HEAD
 
 const Clients = () => {
   const [users, setUsers] = useState([]);
@@ -25,6 +26,15 @@ const Clients = () => {
   return (
     <>
       <Calendars></Calendars>
+=======
+import ProjectCard from '../Cards/ProjectCard';
+
+const Clients = () => {
+  
+  return (
+    <>
+      <ProjectCard></ProjectCard>
+>>>>>>> 7d351daea0ed1c782b362561355a503e28183acf
     </>
   );
 };

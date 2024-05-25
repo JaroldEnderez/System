@@ -8,6 +8,11 @@ const taskRoutes = require('./routes/taskRoutes')
 const discussionRoutes = require('./routes/discussionRoutes')
 const {notFound,errorHandler} = require('./middleware/errorMiddlewares')
 const commentRoutes = require('./routes/commentRoutes')
+<<<<<<< HEAD
+=======
+const milestoneRoutes = require('./routes/milestoneRoutes')
+
+>>>>>>> 7d351daea0ed1c782b362561355a503e28183acf
 
 dotenv.config();
 connectDB();
@@ -18,6 +23,10 @@ app.use('/api/project', projectRoutes)
 app.use('/api/tasks', taskRoutes)
 app.use('/api/discussions', discussionRoutes)
 app.use('/api/comments', commentRoutes)
+<<<<<<< HEAD
+=======
+app.use('/api/milestones', milestoneRoutes)
+>>>>>>> 7d351daea0ed1c782b362561355a503e28183acf
 app.use(notFound)
 app.use(errorHandler)
 app.use((req, res, next) => {

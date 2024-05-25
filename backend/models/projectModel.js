@@ -41,9 +41,12 @@ const projectModel = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Milestone'
           }]
+<<<<<<< HEAD
     
     
     
+=======
+>>>>>>> 7d351daea0ed1c782b362561355a503e28183acf
     },
     {
         timestamps:true,
