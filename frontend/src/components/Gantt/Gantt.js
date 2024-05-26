@@ -92,10 +92,7 @@ export default class Gantt extends Component {
 
   componentDidMount() {
     gantt.config.date_format = "%Y-%m-%d %H:%i";
-<<<<<<< HEAD
-=======
     
->>>>>>> 7d351daea0ed1c782b362561355a503e28183acf
   gantt.init(this.ganttContainer);
   this.initGanttDataProcessor();
 

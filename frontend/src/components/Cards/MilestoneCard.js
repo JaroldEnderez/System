@@ -2,6 +2,7 @@ import { Box, Text, Badge, Divider } from '@chakra-ui/react';
 import React from 'react';
 
 const MilestoneCard = ({ milestone }) => {
+
   return (
     <Box
       borderWidth="1px"

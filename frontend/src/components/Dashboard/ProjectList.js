@@ -12,16 +12,11 @@ const ProjectList = () => {
   const [projects, setProjects] = useState([]);
   const [sectionStates, setSectionStates] = useState([]);
   const history = useHistory();  // Initialize useHistory
-<<<<<<< HEAD
-
-=======
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   }
->>>>>>> 7d351daea0ed1c782b362561355a503e28183acf
-  
   // Simulating fetching projects from the database
   useEffect(() => {
     // Replace this with your actual API call to fetch projects
@@ -57,14 +52,15 @@ const ProjectList = () => {
   return (
     <ChakraProvider theme={CustomTheme}>
         <Flex direction="row">
-            <Sidebar />
+        <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar}/>
               <VStack
                 align="flex-start" // Set vertical alignment to flex-start
                 height="100vh"    // Set a height for the container (adjust as needed)           // Allow the VStack to grow and take remaining horizontal space
                 overflowX="auto"
                 width="100%"
                 >
-                <Header/>
+          
+                <Header toggleSidebar={toggleSidebar}/>
                 <Box padding='4' paddingBottom='4'>
                 <Heading paddingBottom='10'>Projects</Heading>
                 {/* Render dynamic collapsible sections based on projects */}
