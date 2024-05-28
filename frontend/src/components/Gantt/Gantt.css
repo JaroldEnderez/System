@@ -6,3 +6,34 @@
   width:700px;
   height:600px;
 }
+
+.Medium {
+
+  color: #34c461;
+  background: #34c461;
+}
+
+.Medium .gantt_task_progress {
+  background: #23964d;
+}
+
+.High {
+
+  color: #d96c49;
+  background: #d96c49;
+}
+
+.High .gantt_task_progress {
+  background: #db2536;
+}
+
+
+.Low {
+
+  color: #6ba8e3;
+  background: #6ba8e3;
+}
+
+.Low .gantt_task_progress {
+  background: #547dab;
+}

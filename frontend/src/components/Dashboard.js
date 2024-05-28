@@ -11,7 +11,7 @@ const Dashboard = () => {
   return (
     <>
         <HStack width='100%' padding='4 ' paddingBottom='0'>
-              <StatusButton status='Pending'/>
+              
               <StatusButton status='Paused'/>
               <StatusButton status='Ongoing'/>
               <StatusButton status='Completed'/>

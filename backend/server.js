@@ -9,6 +9,7 @@ const discussionRoutes = require('./routes/discussionRoutes')
 const {notFound,errorHandler} = require('./middleware/errorMiddlewares')
 const commentRoutes = require('./routes/commentRoutes')
 const milestoneRoutes = require('./routes/milestoneRoutes')
+const logsRoute = require('./routes/logsRoute')
 
 
 dotenv.config();
@@ -21,6 +22,7 @@ app.use('/api/tasks', taskRoutes)
 app.use('/api/discussions', discussionRoutes)
 app.use('/api/comments', commentRoutes)
 app.use('/api/milestones', milestoneRoutes)
+app.use('/api/logs', logsRoute)
 app.use(notFound)
 app.use(errorHandler)
 app.use((req, res, next) => {

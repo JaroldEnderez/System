@@ -30,6 +30,12 @@ const ProjectCreationPage = () => {
     const [city, setCity] = useState('')
     const [province, setProvince] = useState('')
     const [street, setStreet] = useState('')
+    
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => {
+      setIsSidebarOpen(!isSidebarOpen);
+    }
 
     const handleCreateProject = async () => {
     
@@ -82,6 +88,8 @@ const ProjectCreationPage = () => {
         setProvince('');
         setProcuringEntity('');
         setProjectDescription('');
+
+
       } catch (error) {
         toast({
           title: "Error Occured!",
@@ -108,14 +116,16 @@ const ProjectCreationPage = () => {
   return (
     <ChakraProvider theme={CustomTheme}>
       <Flex direction="row">
-        <Sidebar />
+                <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar}/>
+
           <VStack
             align="flex-start" // Set vertical alignment to flex-start
             height="100vh"    // Set a height for the container (adjust as needed)           // Allow the VStack to grow and take remaining horizontal space
             overflowX="auto"
             width="100%"
             >
-            <Header/>
+                        <Header toggleSidebar={toggleSidebar}/>
+
             
           <Box padding='4 ' paddingBottom='0'  width='100%'>
             

@@ -9,6 +9,8 @@ import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
 import Gantt from '../Gantt';
 import Toolbar from '../Toolbar'; 
 import MessageArea from '../MessageArea';
+import { UserAuth } from '../../Context/UserProvider';
+import axios from 'axios';
 
 const Calendars = () => {
   const [projects, setProjects] = useState([])
@@ -17,6 +19,7 @@ const Calendars = () => {
   const [selectedOwner, setSelectedOwner] = useState('');
   const [owners, setOwners] = useState([])
   const [selectedTask, setSelectedTask] = useState('')
+  const {user} = UserAuth()
   
   var labels = gantt.locale.labels;
   gantt.locale.labels.column_owner = labels.section_owner= "Owner";
@@ -36,7 +39,17 @@ const Calendars = () => {
     options: []
   };
 
+  const opts = [
+    { key: 'High', label: 'High' },
+    { key: 'Medium', label: 'Medium' },
+    { key: 'Low', label: 'Low' }
+];
   
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  }
   
   useEffect(() => {
     // Replace this with your actual API call to fetch projects
@@ -54,27 +67,46 @@ const Calendars = () => {
           textColor: "#FFF"
         }));
         console.log(staffList)
+        gantt.serverList('staff', staffList);
+
+        
 
         gantt.config.columns = [
-          {name:"text",       label:"Task name",  width:110, tree:true },
-          {name:"start_date", label:"Start time", align:"center" },
-          {name:"duration",   label:"Duration",   align:"center", width:50   },
-          {name:"add",        label:"",           width:44 },
-          { name: 'owner', label: 'Owner', align: 'center', template: function (task) {
+          {name: "text", label: "Task name", align:'center',width: 200, tree: true},
+          {name: "start_date", label: "Start time", align: "center"},
+          {name: "duration", label: "Duration", align: "center", width: 50},
+          {name: "add", label: "", width: 44},
+          {name: "owner", label: "Owner", align: "center", template: function (task) {
+            
             const owner = gantt.serverList('staff').find(o => o.key === task.owner);
-            return owner ? owner.label : '';
+            return owner ? owner.label : 'N/A';
+          }},
+          {name: "priority", label: "Priority", width: 80, template: function (task) {
+            const priority = opts.find(prio => prio.key === task.priority);
+            return priority ? priority.label : 'Medium'
           }}
-      ];
+        ];
     
       gantt.config.lightbox.sections = [
         { name: 'text', height: 70, map_to: 'text', type: 'textarea', focus: true},
         { name: 'description', height: 70, map_to: 'description', type: 'textarea', focus: true },
         {name: "owner", height: 22, map_to: "owner", type: "select", options: gantt.serverList("staff")},
+        {name: 'priority', height: 22, map_to: 'priority', type: 'select', label:'Priority', options: opts},
         {name: 'time', type: 'duration', map_to: 'auto' }
         // Add more sections as needed
       ];
-        // Populate the gantt.serverList
-        gantt.serverList('staff', staffList);
+
+
+      gantt.templates.task_class = function (start, end, task) {
+        return task.priority;
+    };
+    
+    gantt.templates.rightside_text = function (start, end, task) {
+      return "ID: #" + task._id;
+
+      gantt.config.show_links = true;
+
+    };
 
       } catch (error) {
         console.error('Error fetching projects:', error);
@@ -84,7 +116,7 @@ const Calendars = () => {
     fetchUsers();
   }, []);
 
-  
+ 
   
   useEffect(() => {
   // Replace this with your actual API call to fetch projects
@@ -192,7 +224,7 @@ gantt.config.tooltip = {
   }, [selectedProjectId]);
 
   useEffect(() => {
-    const handleAfterTaskAdd = (id, task) => {
+    const handleAfterTaskAdd = async(id, task) => {
       // Use the current project ID from the ref
       const currentProjectId = selectedProjectIdRef.current;
       task.projectId = currentProjectId;
@@ -212,7 +244,7 @@ gantt.config.tooltip = {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(task),
+        body: JSON.stringify(task)
       })
       .then(response => response.json())
       .then(data => {
@@ -221,6 +253,17 @@ gantt.config.tooltip = {
       .catch(error => {
         console.error('Error adding task:', error);
       });
+
+      try{
+        const response = await axios.post(`/api/logs`, {
+          content: `New Task created (${task.text}) by ${user._id}`,
+          author: user._id,
+          projectId: currentProjectId,
+        })
+        console.log("Log success:", response.data);
+      }catch(error){
+        console.error("Error logging action: ", error)
+      }
     };
 
     // Attach the event listener once on component mount
@@ -356,14 +399,14 @@ gantt.config.tooltip = {
       <ChakraProvider theme={CustomTheme}>
 
       <Flex direction="row">
-            <Sidebar />
+        <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar}/>
               <VStack
                 align="flex-start" // Set vertical alignment to flex-start
                 height="100vh"    // Set a height for the container (adjust as needed)           // Allow the VStack to grow and take remaining horizontal space
                 overflowX="auto"
                 width="100%"
                 >
-                <Header/>
+                <Header toggleSidebar={toggleSidebar}/>
                   <Box padding='4' paddingBottom='4' width='100%'>
                     <Heading paddingBottom='10'>Tasks</Heading>
                     <ProjectTabs projects={projects}/>

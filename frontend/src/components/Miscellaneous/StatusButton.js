@@ -42,7 +42,7 @@ const StatusButton = ({ status }) => {
   }
 
   return (
-    <Box width="25%" height="125px" backgroundColor={backgroundColor} borderRadius='10'>  
+    <Box width="33.3%" height="125px" backgroundColor={backgroundColor} borderRadius='10'>  
       <Link to={`/projects/${status}`}>
         <Box padding='3'>
           {icon}

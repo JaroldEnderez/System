@@ -20,7 +20,7 @@ const [selectedTask, setSelectedTask] = useState(null)
 const [owners, setOwners] = useState([])
 const [ project, setProject] = useState('')
 const [ tasks, setTasks] = useState([])
-const  projectId  = '65f52bd2bc92a7fc9d82e5a8';
+const  projectId  = '6653cc88cd999a0e294326c3';
 
 const toggleSidebar = (task) => {
   setSelectedTask(task);
@@ -90,7 +90,7 @@ useEffect(() => {
 
       <List spacing={3}>
         {tasks.map(task => (
-          <ListItem key={task.id} onClick={() => toggleSidebar(task)} border="1px solid #e2e8f0" borderRadius="md" p="3">
+          <ListItem key={task.id} onClick={() => toggleSidebar(task)} border="1px solid #e2e8f0" borderRadius="md" p="3" >
             <Text><strong>Task:</strong> {task.text}  <Text color='blue'>{task.id}</Text></Text>
             <Text><strong>Start Date:</strong> {task.start_date}</Text>
             <Text><strong>Duration:</strong> {task.duration} days</Text>

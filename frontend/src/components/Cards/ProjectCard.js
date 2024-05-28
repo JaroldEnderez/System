@@ -70,8 +70,8 @@ const ProjectCard = ({project}) => {
                     <Text>Tasks</Text>
                 </Box>
                 <Box>
-                    <Text>10</Text>
-                    <Text>Milestones</Text>
+                    <Text>%</Text>
+                    <Text>Progress</Text>
                 </Box>
                 <Box>
                     <Text>11</Text>

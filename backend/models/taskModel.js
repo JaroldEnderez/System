@@ -16,7 +16,10 @@ const taskModel = mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
           }],
-        parent:{type:String}
+        parent:{type:String},
+        priority:{type: String,
+            enum: ['Low', 'Medium', 'High'],
+            default: 'Medium'}
 
     },
     {

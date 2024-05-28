@@ -40,7 +40,11 @@ const projectModel = mongoose.Schema(
         milestones: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Milestone'
-          }]
+          }],
+        logs: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Logs', // Assuming you have a User model
+        }]
     },
     {
         timestamps:true,

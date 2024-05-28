@@ -81,9 +81,13 @@ export default class Gantt extends Component {
   }
   
   componentDidUpdate(prevProps) {
+    console.log("componentDidUpdate called");
+    console.log("Previous projectId: ", prevProps.projectId);
+    console.log("Current projectId: ", this.props.projectId);
+
     if (this.props.projectId !== prevProps.projectId) {
       // Clear existing Gantt chart data
-      console.log("Project ID changed to: ",this.props.projectId)
+      console.log("Project ID changed to: ", this.props.projectId);
       gantt.clearAll();
       // Fetch and load data for the new project
       this.fetchProjectData();
@@ -106,7 +110,6 @@ export default class Gantt extends Component {
     console.log("The project ID I will fetch is: ", projectId)
     console.log('Project ID: ', projectId);
     // Fetch projects
-    gantt.clearAll()
     fetch(`/api/project/${projectId}`)
       .then(response => response.json())
       .then(async (projectData) => {
@@ -134,20 +137,20 @@ export default class Gantt extends Component {
             return formattedTask;
           } catch (error) {
             return null; // Handle error case
-          }
+          } 
         });
         // Wait for all detailedTasksPromises to resolve
         console.log('detailed task promises: ', detailedTasksPromises);
         const allTasks = await Promise.all(detailedTasksPromises);
         console.log("All Tasks for" ,projectId,": ", allTasks)
-  
+        
         // Filter out null values from the tasks array
         const filteredTasks = allTasks.filter(task => task !== null);  
         console.log("Filtered Tasks: ",filteredTasks)
         // Initialize Gantt chart with new data
         gantt.init(this.ganttContainer);
         // Parse data for the selected project's tasks
-        gantt.parse({ data: filteredTasks, links: [] });
+        gantt.parse({ data: filteredTasks, links: [{id:1, source:'1716840223086', target:'1716842692889', type:"1"}] });
       })
       .catch(error => {
         console.error('Error fetching project or tasks:', error);
